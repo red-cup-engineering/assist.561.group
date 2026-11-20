@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { sha256Hex } from "@red-cup-engineering/semiotic-content-address-system";
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -30,9 +31,9 @@ const result = await build({ stdin: { contents: `import { createAssistWorker } f
 if (Object.values(result.metafile.outputs).some(output => output.imports.length)) throw new TypeError('ASSIST public artifact has unresolved runtime imports');
 await mkdir(dirname(outfile), { recursive: true });
 await writeFile(outfile, result.outputFiles[0].contents);
-const digest = bytes => createHash('sha256').update(bytes).digest('hex');
-const receipt = { kind: 'assist.public-release-input', esbuildVersion, rosterSha256: digest(source),
-  outputSha256: digest(result.outputFiles[0].contents), bytes: result.outputFiles[0].contents.length,
+
+const receipt = { kind: 'assist.public-release-input', esbuildVersion, rosterSha256: sha256Hex(source),
+  outputSha256: sha256Hex(result.outputFiles[0].contents), bytes: result.outputFiles[0].contents.length,
   ...(configuration.presentations === undefined
     ? { apex: configuration.apex ?? 'assist.561.group', hostMode: configuration.hostMode ?? 'subdomains' }
     : { presentations: configuration.presentations }),
