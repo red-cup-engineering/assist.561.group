@@ -3,7 +3,6 @@ import { sha256Hex } from "@red-cup-engineering/semiotic-content-address-system"
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createHash } from 'node:crypto';
 import { build, version as esbuildVersion } from 'esbuild';
 import { boundAssistRecordSet } from '@red-cup-engineering/assist/records';
 import { createAssistWorker } from '../src/index.mjs';
